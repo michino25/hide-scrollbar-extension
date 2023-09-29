@@ -25,4 +25,5 @@
 -   Fix bug chrome:// (chỉ cho chạy ở https và http)
 -   About me dẫn link github
 
-![hinh-anh-extension](https://i.imgur.com/GCHitb3.png)
+<!-- ![hinh-anh-extension](https://i.imgur.com/GCHitb3.png) -->
+<img src="https://i.imgur.com/GCHitb3.png" alt="hinh-anh-extension" width="250" />
