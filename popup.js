@@ -1,54 +1,61 @@
-// Intro loading
-const containerElement = document.querySelector(".pulse-container");
-
-// Add event listener to trigger the animation end
-containerElement.addEventListener("animationend", () => {
-    containerElement.classList.add("hide");
+// Load hiệu ứng intro, hide khi animation end
+const container = document.querySelector(".pulse-container");
+container.addEventListener("animationend", () => {
+    container.classList.add("hide");
 });
 
+// Variable
 var checkbox = document.getElementById("toggle-scrollbar");
 var statusInfo = document.getElementById("status-info");
+var hostname = document.getElementById("hostname");
 
-// Get the data and display it on the extension
-chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    let currentWebsite = new URL(tabs[0].url).hostname;
+// Cập nhật giao diện popup html
+async function updateStatusPopup(hideArr) {
+    const tab = await getCurrentTab();
+    const currentWebsite = new URL(tab.url).hostname;
 
-    chrome.storage.local.get("hiddenWebsites", (data) => {
-        let hiddenWebsites = data.hiddenWebsites || [];
-        checkbox.checked = hiddenWebsites.includes(currentWebsite);
-
-        // Theo dõi tình hình
-        console.log(hiddenWebsites);
-
-        // Status
-        if (checkbox.checked) {
-            statusInfo.innerText = "Scrollbars are hidden";
-        } else {
-            statusInfo.innerText = "Scrollbars displayed by default";
-        }
-    });
+    let isHidden = hideArr.includes(currentWebsite);
+    checkbox.checked = isHidden;
+    statusInfo.innerText = isHidden
+        ? "Scrollbars are hidden"
+        : "Scrollbars displayed by default";
 
     // Website link
-    var hostnameElement = document.getElementById("hostname");
-    hostnameElement.textContent = currentWebsite;
+    hostname.textContent = currentWebsite;
+}
+
+// Lấy thông tin tab hiện tại
+async function getCurrentTab() {
+    const queryOptions = { active: true, currentWindow: true };
+    const [tab] = await chrome.tabs.query(queryOptions);
+    return tab;
+}
+
+// Get data and display on popup
+chrome.storage.local.get(["hideArr"], (data) => {
+    let hideArr = data.hideArr || [];
+    updateStatusPopup(hideArr);
 });
 
-// Handling when pressing the button to change the state
-checkbox.addEventListener("click", () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        chrome.runtime.sendMessage(
-            { action: "toggleScrollbar", url: tabs[0].url },
-            (response) => {
-                let hiddenWebsites = response.hiddenWebsites || [];
-                let currentWebsite = new URL(tabs[0].url).hostname;
-                checkbox.checked = hiddenWebsites.includes(currentWebsite);
-
-                // Reload the page after change state of checkbox
-                chrome.runtime.sendMessage({ action: "reloadTab" });
-
-                // Collapse the popup window
-                window.close();
-            }
-        );
+// Change the state
+checkbox.addEventListener("click", async () => {
+    const tab = await getCurrentTab();
+    chrome.runtime.sendMessage({
+        action: "toggleScrollbar",
+        url: tab.url,
+        id: tab.id,
     });
 });
+
+chrome.storage.onChanged.addListener((changes, namespace) => {
+    if (changes.hideArr) {
+        let hideArr = changes.hideArr.newValue || [];
+        updateStatusPopup(hideArr);
+    }
+});
+
+// Reload the page after change state of checkbox
+// chrome.runtime.sendMessage({ action: "reloadTab" });
+
+// Collapse the popup window
+// window.close();

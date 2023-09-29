@@ -1,9 +1,9 @@
 {
     "manifest_version": 3,
     "name": "Hide Scrollbar",
-    "version": "1.0",
-    "description": "Chrome extension to hide the scrollbar on all web pages.",
-    "permissions": ["activeTab", "storage"],
+    "version": "0.3.0",
+    "description": "Toggled the visibility of scrollbars on web pages for a cleaner viewing experience.",
+    "permissions": ["activeTab", "storage", "contextMenus", "scripting"],
     "background": {
         "service_worker": "background.js"
     },
@@ -19,6 +19,7 @@
     },
     "icons": {
         "16": "images/icon16.png",
+        "32": "images/icon32.png",
         "48": "images/icon48.png",
         "128": "images/icon128.png"
     }

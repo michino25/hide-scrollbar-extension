@@ -1,18 +1,12 @@
 # hide-scrollbar-extension
-Luồng dữ liệu
-Lưu vào 2 bộ lưu trữ:
 
--   chrome.storage.local: dành cho các trang web ở browser
--   localStorage: dành cho các trang web là Chrome Apps
-    (do ở Chrome Apps chrome.storage.local bị lỗi)
+Lưu vào chrome.storage.local
+Content Script cho trang web loading
+Inject script style vào trang web khi web đã load xong >> giảm độ trễ
+Mở popup Hiện intro
+Có context menu
+Fix bug chrome:// (chỉ cho chạy ở https và http)
+About me dẫn link github
 
-Content Script:
-Inject CSS vào trang web, là:
-
--   App tìm trong localStorage
--   Web tìm trong chrome.storage.local
-
-Thử xem khác key thì có bị conflict không
-
-Mở popup:
-\_ Hiện intro
+localStorage: dành cho các trang web là Chrome Apps
+(do ở Chrome Apps chrome.storage.local bị lỗi) ??
