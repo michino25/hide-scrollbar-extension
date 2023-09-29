@@ -26,4 +26,4 @@
 -   About me dẫn link github
 
 <!-- ![hinh-anh-extension](https://i.imgur.com/GCHitb3.png) -->
-<img src="https://i.imgur.com/GCHitb3.png" alt="hinh-anh-extension" width="250" />
+<img src="https://i.imgur.com/GCHitb3.png" alt="hinh-anh-extension" width="650" />
